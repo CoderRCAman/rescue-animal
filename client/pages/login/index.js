@@ -83,7 +83,7 @@ function Index() {
               "https://images.pexels.com/photos/6601811/pexels-photo-6601811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             }
           />
-          <p>das</p>
+          
         </div>
         <div className="flex flex-col w-3/4  items-center">
           <h1 className="text-[15px] mb-4 text-stone-600 font-semibold font-serif text-center text-lg md:text-4xl">
