@@ -44,6 +44,12 @@ export default function LeftBar() {
       className='items-center  space-x-2 flex text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all '>
       <LogoutOutlined/><span>Logout</span></button>
       {/* </div> */}
+
+      <button 
+      onClick={logout }
+      className='items-center  space-x-2 flex text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all '>
+      <LogoutOutlined/><span>Add NGO</span></button>
+      {/* </div> */}
        
      
     </div>

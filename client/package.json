@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev -p $PUBLIC_PORT",
+		"dev": "next dev ",
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint"
@@ -13,7 +13,7 @@
 		"axios": "^0.27.2",
 		"leaflet": "^1.8.0",
 		"lodash": "^4.17.21",
-		"next": "^12.1.6",
+		"next": "^13.1.2",
 		"react": "^18.1.0",
 		"react-dom": "^18.1.0",
 		"react-google-login": "^5.2.2",

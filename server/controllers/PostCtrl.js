@@ -15,6 +15,7 @@ const Post = async (req, res) => {
     multiples: true,
     allowEmptyFiles: true,
   });
+  console.log(form)
   const authDetails = getAuthDetails(req);
   console.log(authDetails);
   try {
@@ -28,7 +29,7 @@ const Post = async (req, res) => {
           const file = files.file[i];
           await cloudinary.v2.uploader.upload(
             file.filepath,
-            { folder: "minor" },
+            { folder: "test" },
             async (err, result) => {
               if (err) console.log(err);
               const info = {
@@ -48,6 +49,7 @@ const Post = async (req, res) => {
         type,
         user_info: authDetails.user_id,
       }); 
+      console.log(uploadedPics)
       await newPost.save() ;
     });
     return res.status(200).json({ msg: "ok" });
@@ -56,5 +58,17 @@ const Post = async (req, res) => {
     return res.status(500).json({ msg: "ISE" });
   }
 };
+const getPost = async(req,res) =>{
+    try {
+        const post =await PostModel.find()
+        res.json(post)
+    } catch (err) {
+        return res.status(500).json({msg: err.message})
+        
+    }
 
-module.exports = { Post };
+};
+
+
+
+module.exports = { Post, getPost };
