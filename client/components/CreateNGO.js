@@ -1,34 +1,73 @@
 import React, { useState } from "react";
 import "react-responsive-modal/styles.css";
+import toast, { Toaster } from "react-hot-toast";
 import { Modal } from "react-responsive-modal";
 import axios from "axios";
 import dynamic from "next/dynamic";
+import {EnvironmentOutlined} from '@ant-design/icons'
 
 const MapComponent = dynamic(() => import("./MapComponent"), { ssr: false });
 
-export default function PostModal({ open, onClose }) {
-  const [images, setImages] = useState([]);
-  const [description, setDescription] = useState("");
-  const [checkbox, setCheckbox] = useState({
-    minor: false,
-    major: false,
-  });
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    images.forEach((image) => {
-      formData.append("file", image);
-    });
-    formData.append("description", description);
-    if (checkbox.minor) formData.append("type", "minor");
-    else formData.append("type", "major");
+const initialState = {
+  name: "",
+  role: "ngo",
+  email: "",
+  password: "",
+  pincode: "",
+  address: "",
+};
 
-    const response = await fetch("http://localhost:5000/api/post", {
-      method: "POST",
-      credentials: "include",
-      body: formData,
-    });
+export default function PostModal({ open, onClose }) {
+  // const fileRef = useRef(null);
+  const [state, setState] = useState(initialState);
+  const [avatar, setAvatar] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // const [images, setImages] = useState([]);
+  // const [description, setDescription] = useState("");
+
+  const handleChangeInput = (e) => {
+    const { name, value } = e.target;
+    if (name === "avatar") {
+      setAvatar(e.target.files[0]);
+    }
+    setState({ ...state, [name]: value });
   };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+
+      formData.append("avatar", avatar);
+      formData.append("name", state.name);
+      formData.append("email", state.email);
+      formData.append("password", state.password);
+      formData.append("pincode", state.pincode);
+      formData.append("address", state.address);
+      formData.append("role", state.role);
+
+      const res = await axios({
+        method: "POST",
+        url: "http://localhost:5000/user/adddoctor",
+        data: formData,
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (res.status === 200) {
+        toast.success("Successfully created!");
+      } else {
+        toast.error("Failed to create an doctor!");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -40,14 +79,17 @@ export default function PostModal({ open, onClose }) {
           modal: "customModalEnroll",
         }}
       >
-        <h2 className="text-2xl font-semibold">Post</h2>
+      <Toaster/>
+
+        <h2 className="text-2xl font-semibold">Create NGO</h2>
         <form
           className=" flex flex-col justify-center w-full"
-          onSubmit={handleSubmit}
+          onSubmit={handleFormSubmit}
         >
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
             Upload Image
           </label>
+
           <input
             className="block 
                 text-sm text-grey-500
@@ -60,51 +102,91 @@ export default function PostModal({ open, onClose }) {
             id="file_input"
             multiple
             type="file"
-            onChange={(e) => {
-              const files = e.target.files;
-              const entire = [];
-              for (let i = 0; i < files.length; ++i) entire.push(files[i]);
-              setImages(entire);
-            }}
+            name="avatar"
+            onChange={handleChangeInput}
           />
-          <div className="flex flex-wrap  justify-center ">
-            {images &&
-              images.map((image) => (
-                <img
-                  src={URL.createObjectURL(image)}
-                  className="h-36 w-36 md:h-44 md:w-44 border rounded-full"
-                />
-              ))}
-          </div>
+
+          <img
+            src={
+              avatar
+                ? URL.createObjectURL(avatar)
+                : "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHx8&w=1000&q=80"
+            }
+            alt="avatar"
+            className="w-32 h-32 md:rounded-full rounded-full m-auto"
+          />
+
           <label className=" lg:block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
             Org Name
           </label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text"/>
-          
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="name"
+            type="text"
+            name="name"
+            onChange={handleChangeInput}
+          />
+
           <label className=" lg:block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
             Email
           </label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="abc@mail.com"/>
-         
-            
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="username"
+            type="text"
+            placeholder="abc@mail.com"
+            name="email"
+            onChange={handleChangeInput}
+          />
+
           <label className=" lg:block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
             Password
           </label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="*******"/>
-                
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="password"
+            type="text"
+            placeholder="*******"
+            name="password"
+            onChange={handleChangeInput}
+          />
+
           <label className=" lg:block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
             Address
           </label>
           <textarea
-            
-            className="resize-none shadow appearance-none border border-stone-400 rounded  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-         
+          name="address"
+          onChange={handleChangeInput}
+          className="resize-none shadow appearance-none border border-stone-400 rounded  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          <div className="flex flex-row justify-between">
+            <div className="">
+              <label className=" lg:block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                Pincode
+              </label>
+              <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="pincode"
+                type="text"
+                name="pincode"
+                onChange={handleChangeInput}
+                
+              />
+            </div>
+
+            <div className=" py-7 flex flex-row justify-between">
+              
+              <button class=" flex-end bg-indigo-700 hover:bg-indigo-400 text-stone-200  py-2 px-2 rounded inline-flex items-center">
+              <EnvironmentOutlined />
+                <span className="hidden lg:block">Use My Location</span>
+              </button>
+            </div>
+          </div>
+
           <button
             type="submit"
             className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-              Create
+            Create
           </button>
         </form>
       </Modal>

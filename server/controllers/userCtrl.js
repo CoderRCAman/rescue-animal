@@ -2,11 +2,19 @@ const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { google } = require("googleapis");
 const { getAuthDetails } = require("../middleware/auth");
-
+const path = require("path");
+const { IncomingForm } = require("formidable");
+const _ = require("lodash");
 const { OAuth2 } = google.auth;
 const client = new OAuth2(
   "223407826323-pcf12i097m2dbhqfdv9079nr23vjbkeg.apps.googleusercontent.com"
 );
+
+const deleteFileFromDisk = async (filePath) => {
+  try {
+    await unlink(filePath);
+  } catch (error) {}
+};
 
 const userCtrl = {
   getUser: async (req, res) => {
@@ -203,7 +211,93 @@ const userCtrl = {
       return res.status(500).json({ msg: err.message });
     }
 
-  }
+  },
+  addDocotor: async (req, res) => {
+    const options = {
+      uploadDir: path.join(__dirname, "..", "avatars"),
+      keepExtensions: true,
+      maxFileSize: 5 * 1024 * 1024,
+    };
+    const form = new IncomingForm(options);
+    let newNGO = null;
+    try {
+      // const authInfo = getAuthDetails(req);
+
+      form.parse(req, async (err, fields, files) => {
+        const {
+          name,
+          email,
+          password,
+          role,
+          pincode,
+          address,
+          
+          
+        } = fields;
+
+        if (err) {
+          if (err.code === 1009)
+            return res
+              .status(500)
+              .json({ msg: "Maximum supported file is 5mb" });
+          else return res.status(500).json({ msg: "Somethings went wrong!" });
+        }
+        const alreadyExist = await Users.findOne({
+          $or: [{ email: email }],
+        });
+        if (alreadyExist)
+          return res.status(400).json({
+            msg: "NGO already exist!",
+          });
+
+        if (password.length < 6)
+          return res
+            .status(400)
+            .json({ msg: "Password is at least 6 characters long." });
+
+        // Password Encryption
+        const passwordHash = await bcrypt.hash(password, 10);
+        if (_.isEmpty(files)) {
+          //✅  empty
+          newNGO = await Users.create({
+            name,
+            email,
+            password: passwordHash,
+            role,
+            pincode,
+            address,
+            
+            
+          });
+        } else {
+          // ❌ files are present
+          console.log(files);
+          const newAvatar = {
+            download_url: `http://localhost:5000/${files.avatar.newFilename}`,
+            file_name: files.avatar.newFilename,
+          };
+          newNGO = await Users.create({
+            name,
+            email,
+            password: passwordHash,
+            role,
+            pincode,
+            address,
+            
+            avatar: newAvatar,
+          });
+        }
+
+        await newNGO.save();
+
+        res.json({ msg: "NGO created" });
+      });
+    } catch (err) {
+      console.l(err);
+      res.status(500).json({ message: "YOU BITCH!" });
+    }
+  },
+
 };
 
 module.exports = userCtrl;

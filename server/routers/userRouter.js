@@ -22,4 +22,6 @@ router.get('/infor', userCtrl.getUser)
 
 router.patch('/update/:id',userCtrl.updateUser)
 
+router.post('/adddoctor', userCtrl.addDocotor)
+
 module.exports = router

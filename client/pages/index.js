@@ -40,9 +40,11 @@ export default function Home() {
           {postInfo && postInfo.map((post) => (
             <div>
            
-              <div>
-                  <img src={post.images?.download_url}  className="h-36 w-36 md:h-44 md:w-44 border"/>             
-              </div>
+            <div> 
+            {post.images && post.images.map((image) =>
+              <img src={image?.download_url}  className="h-36 w-36 md:h-44 md:w-44 border"/>             
+            )}
+          </div>
            
               {post?.description}
             </div>
