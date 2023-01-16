@@ -3,9 +3,11 @@ import Link from 'next/link'
 import axios from '../axios'
 import {HomeOutlined, LogoutOutlined, UserOutlined,SendOutlined} from '@ant-design/icons'
 import PostModal from './PostModal'
+import CreateNGO from './CreateNGO'
 
 export default function LeftBar() { 
   const [open, setOpen] = useState(false);
+  const [openNGO, setOpenNGO] = useState(false);
   
   const logout = async () => {
      try {
@@ -21,6 +23,7 @@ export default function LeftBar() {
   return (
     <div className='  flex flex-col '>
    {open &&  <PostModal open={open} onClose={() => onCloseModal(setOpen)} />}
+   {openNGO &&  <CreateNGO open={openNGO} onClose={() => onCloseModal(setOpenNGO)} />}
       {/* <div className='flex flex-col justify-start'> */}
       <Link href="/">
       <button 
@@ -46,7 +49,7 @@ export default function LeftBar() {
       {/* </div> */}
 
       <button 
-      onClick={logout }
+      onClick={() => onOpenModal(setOpenNGO)}
       className='items-center  space-x-2 flex text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all '>
       <LogoutOutlined/><span>Add NGO</span></button>
       {/* </div> */}

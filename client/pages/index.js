@@ -39,7 +39,11 @@ export default function Home() {
         <div className="w-full md:w-3/4  border p-2 h-[92vh] overflow-scroll ">
           {postInfo && postInfo.map((post) => (
             <div>
-            {post?.image?.download_url}
+           
+              <div>
+                  <img src={post.images?.download_url}  className="h-36 w-36 md:h-44 md:w-44 border"/>             
+              </div>
+           
               {post?.description}
             </div>
           ))

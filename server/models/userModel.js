@@ -47,6 +47,12 @@ const userSchema = new mongoose.Schema(
         file_name: "",
       },
     },
+    orgainzation_name:{
+      type: String,
+      // required: [true, "Please enter your name!"], 
+      default: '',
+      trim: true,
+    }
   },
   {
     timestamps: true,
