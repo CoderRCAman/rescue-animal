@@ -15,6 +15,28 @@
 .customOverlayEnroll {
   background: rgba(128, 179, 201, 0.7);
 }
+.image-size-0 {
+  width: 400px;
+  height: 250px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.image-size-1 {
+  width: 150px;
+  height: 170px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+.image-size-2 {
+  width: 150px;
+  height: 170px;
+}
+.image-thamb.active{
+  
+  border: 2px solid rgb(206, 121, 18);
+  border-radius: 5px;
+  width: 100px;
+}
 @media screen and (max-width: 768px) {
   .customModalEnroll{
     width: 90%;

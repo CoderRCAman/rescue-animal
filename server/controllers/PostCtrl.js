@@ -60,7 +60,7 @@ const Post = async (req, res) => {
 };
 const getPost = async(req,res) =>{
     try {
-        const post =await PostModel.find()
+        const post =await PostModel.find().populate('user_info')
         res.json(post)
     } catch (err) {
         return res.status(500).json({msg: err.message})
