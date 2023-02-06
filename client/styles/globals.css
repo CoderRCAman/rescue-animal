@@ -43,4 +43,28 @@
     
   }
 }
+
+.image_custom{
+  position: relative;
   
+}
+.image_custom::after {
+  content: ""; 
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  background-color: black ;
+} 
+
+.image_custom::hover:after{
+  z-index: 1; 
+  background-color: rgba(0, 0, 0,.5)
+}
+
+
+
+
+
+
