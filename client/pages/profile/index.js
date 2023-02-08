@@ -116,15 +116,8 @@ export default function index() {
                   />
                   asadas@gmail.com
                 </p>
-                <label
-                  class=" mt-4block text-gray-700 text-sm font-bold mb-2"
-                  for="username"
-                >
-                  Your Address
-                </label>
-                <br></br>
-                <textarea className="resize-none shadow appearance-none border rounded  w-4/5 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-
+                
+                
                 <div className="pt-2 pb-12">
                   <button className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
                     Update

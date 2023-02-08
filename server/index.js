@@ -7,7 +7,9 @@ const fileUpload = require('express-fileupload')
 const userRouter = require("./routers/userRouter"); 
 const postRouter = require('./routers/postRouter')
 const morgan = require("morgan");
+const path = require("path");
 const app = express();
+app.use(express.static('avatars'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("tiny")); 

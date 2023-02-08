@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
         file_name: "",
       },
     },
-    orgainzation_name:{
+    pincode:{
       type: String,
       // required: [true, "Please enter your name!"], 
       default: '',

@@ -29,9 +29,9 @@ const userCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
-  getUsersAllInfor: async (req, res) => {
+  getNgosAllInfor: async (req, res) => {
     try {
-      const users = await Users.find().select("-password");
+      const users = await Users.find({role: "ngo"}).select("-password");
 
       res.json(users);
     } catch (err) {
@@ -212,7 +212,7 @@ const userCtrl = {
     }
 
   },
-  addDocotor: async (req, res) => {
+  addNgo: async (req, res) => {
     const options = {
       uploadDir: path.join(__dirname, "..", "avatars"),
       keepExtensions: true,
