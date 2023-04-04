@@ -15,7 +15,7 @@ const Post = async (req, res) => {
     multiples: true,
     allowEmptyFiles: true,
   });
-  console.log(form)
+  console.log(form);
   const authDetails = getAuthDetails(req);
   console.log(authDetails);
   try {
@@ -42,15 +42,16 @@ const Post = async (req, res) => {
           );
         }
       }
-      const { type, description } = fields;
+      const { type, description, location } = fields; 
       const newPost = new PostModel({
         description,
         images: uploadedPics,
         type,
         user_info: authDetails.user_id,
-      }); 
-      console.log(uploadedPics)
-      await newPost.save() ;
+        location:JSON.parse(location),
+      });
+      console.log(uploadedPics);
+      await newPost.save();
     });
     return res.status(200).json({ msg: "ok" });
   } catch (error) {
@@ -58,17 +59,13 @@ const Post = async (req, res) => {
     return res.status(500).json({ msg: "ISE" });
   }
 };
-const getPost = async(req,res) =>{
-    try {
-        const post =await PostModel.find().populate('user_info')
-        res.json(post)
-    } catch (err) {
-        return res.status(500).json({msg: err.message})
-        
-    }
-
+const getPost = async (req, res) => {
+  try {
+    const post = await PostModel.find().populate("user_info");
+    res.json(post);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
 };
-
-
 
 module.exports = { Post, getPost };
